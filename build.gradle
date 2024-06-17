@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+group 'com.chegg.boots.federation.poc'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}

@@ -1,0 +1,3 @@
+rootProject.name = 'review'
+include('configure')
+project(':configure').projectDir = file('../configure')
