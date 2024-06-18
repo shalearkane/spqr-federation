@@ -466,3 +466,5 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,gradle,intellij+all,node,windows,macos,linux,direnv,rust,virtualenv,visualstudiocode,fish,zsh
+/apollo-graphql-gateway/router/router
+/apollo-graphql-gateway/router/supergraph.graphql
