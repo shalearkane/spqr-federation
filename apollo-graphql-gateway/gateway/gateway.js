@@ -9,10 +9,9 @@ const gateway = new ApolloGateway({
         // using a single source of truth to compose a schema is recommended and
         // prevents composition failures at runtime using schema validation using
         // real usage-based metrics.
-        { name: "user", url: "http://localhost:5002/graphql" },
-        { name: "reviews", url: "http://localhost:5003/graphql" },
-        { name: "products", url: "http://localhost:5001/graphql" }
-
+        { name: "product", url: "http://localhost:5001/graphql" },
+        { name: "review", url: "http://localhost:5002/graphql" },
+        { name: "user", url: "http://localhost:5003/graphql" },
     ],
     // Experimental: Enabling this enables the query plan view in Playground.
 });
