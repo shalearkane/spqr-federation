@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.chegg'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.leangen.graphql:spqr:0.12.6'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:15.1.0'
+}
