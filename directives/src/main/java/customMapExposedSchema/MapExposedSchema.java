@@ -1,13 +1,33 @@
 package customMapExposedSchema;
 
 import graphql.introspection.Introspection;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLDirective;
-import graphql.schema.GraphQLScalarType;
-import graphql.schema.GraphQLSchema;
+import graphql.schema.*;
 import io.leangen.graphql.GraphQLSchemaGenerator;
 
 public class MapExposedSchema {
+    private static final GraphQLScalarType UNREPRESENTABLE = GraphQLScalarType.newScalar()
+            .name("UNREPRESENTABLE")
+            .description("Use SPQR's SchemaPrinter to remove this from SDL")
+            .coercing(new Coercing<Object, String>() {
+                private static final String ERROR = "Type not intended for use";
+
+                @Override
+                public String serialize(Object dataFetcherResult) {
+                    return "__internal__";
+                }
+
+                @Override
+                public Object parseValue(Object input) {
+                    throw new CoercingParseValueException(ERROR);
+                }
+
+                @Override
+                public Object parseLiteral(Object input) {
+                    throw new CoercingParseLiteralException(ERROR);
+                }
+            })
+            .build();
+
     public static GraphQLSchema customSchema(Object query, String basePackageName) {
 
         GraphQLSchema schema = new GraphQLSchemaGenerator()
@@ -16,7 +36,7 @@ public class MapExposedSchema {
                 .generate();
 
         // UNREPRESENTABLE scalar
-        GraphQLScalarType unrepresentableScalar = (GraphQLScalarType) schema.getType("UNREPRESENTABLE");
+        GraphQLScalarType unrepresentableScalar = UNREPRESENTABLE;
 
         // _mappedOperation directive definition
         GraphQLDirective mappedOperationDirective = GraphQLDirective.newDirective()

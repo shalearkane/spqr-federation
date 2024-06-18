@@ -15,8 +15,9 @@ public class UserService {
     public List<User> users = new ArrayList<>();
 
     public UserService() {
-        users.add(new User("1", "@ada"));
-        users.add(new User("2", "@complete"));
+        users.add(new User("1", "Ada LoveLace"));
+        users.add(new User("2", "Brian Kernighan"));
+        users.add(new User("3", "Rob Pike"));
         reviews.add(new Review("1","Love it!", new User("1"), new Product("1")));
         reviews.add(new Review("2","Too expensive.", new User("1"), new Product("2")));
         reviews.add(new Review("3","Could be better.", new User("2"), new Product("3")));

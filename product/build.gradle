@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.chegg'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':directives')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+    implementation 'io.leangen.graphql:spqr:0.12.6'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:15.1.0'
+
+    implementation 'com.apollographql.federation:federation-graphql-java-support:4.5.0'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+}

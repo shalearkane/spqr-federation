@@ -1,4 +1,5 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer } = require("@apollo/server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
 const { ApolloGateway, RemoteGraphQLDataSource } = require("@apollo/gateway");
 
 const gateway = new ApolloGateway({
@@ -30,7 +31,6 @@ const gateway = new ApolloGateway({
         subscriptions: false,
     });
 
-    server.listen().then(({ url }) => {
-        console.log(`🚀 Server ready at ${url}`);
-    });
+    const { url } = await startStandaloneServer(server);
+    console.log(`🚀  Server ready at ${url}`);
 })();
