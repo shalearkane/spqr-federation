@@ -25,8 +25,8 @@ public class ProductRepository {
 
     public static List<Product> getProductForIds(List<String> productIds) {
         List<Product> ls = new LinkedList<>();
-        for(String p : productIds) {
-            ls.add(new Product(p, generateRandomWord(4), 1));
+        for (String p : productIds) {
+            ls.add(new Product(p, generateRandomWord(4), 1, generateRandomWord(3), generateRandomWord(5), generateRandomWord(6), generateRandomWord(7), generateRandomWord(7), generateRandomWord(7)));
         }
 
         return ls;
