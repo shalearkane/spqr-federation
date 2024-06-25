@@ -7,17 +7,16 @@ import com.chegg.federation.review.model.User;
 import com.chegg.federation.review.query.ProductService;
 import com.chegg.federation.review.query.ReviewQuery;
 import com.chegg.federation.review.query.UserService;
-import graphql.introspection.Introspection;
+import customMapExposedSchema.MapExposedSchema;
 import graphql.schema.*;
 import graphql.schema.idl.SchemaPrinter;
-import io.leangen.graphql.GraphQLSchemaGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -32,92 +31,10 @@ public class GraphQLConfig {
     @Autowired
     private ReviewQuery reviewQuery;
 
-    private static final String MAPPED_TYPE = "_mappedType";
-    private static final String TYPE = "type";
-    private static final GraphQLScalarType UNREPRESENTABLE = GraphQLScalarType.newScalar()
-            .name("UNREPRESENTABLE")
-            .description("Use SPQR's SchemaPrinter to remove this from SDL")
-            .coercing(new Coercing<Object, String>() {
-                private static final String ERROR = "Type not intended for use";
-
-                @Override
-                public String serialize(Object dataFetcherResult) {
-                    return "__internal__";
-                }
-
-                @Override
-                public Object parseValue(Object input) {
-                    throw new CoercingParseValueException(ERROR);
-                }
-
-                @Override
-                public Object parseLiteral(Object input) {
-                    throw new CoercingParseLiteralException(ERROR);
-                }
-            })
-            .build();
 
     @Bean
-    public GraphQLSchema customSchema() {
-
-        GraphQLSchema schema = new GraphQLSchemaGenerator()
-                .withBasePackages("com.chegg.federation.poc.review")
-               .withOperationsFromSingletons(reviewQuery)
-                .generate();
-
-        // _mappedType directive definition
-        GraphQLDirective mappedTypeDirective = GraphQLDirective.newDirective()
-                .name("_mappedType")
-                .description("")
-                .validLocation(Introspection.DirectiveLocation.OBJECT)
-                .argument(GraphQLArgument.newArgument()
-                        .name("type")
-                        .description("")
-                        .type(UNREPRESENTABLE)
-                        .build()
-                )
-                .build();
-
-        // _mappedOperation directive definition
-        GraphQLDirective mappedOperationDirective = GraphQLDirective.newDirective()
-                .name("_mappedOperation")
-                .description("")
-                .validLocation(Introspection.DirectiveLocation.FIELD_DEFINITION)
-                .argument(GraphQLArgument.newArgument()
-                        .name("operation")
-                        .description("")
-                        .type(UNREPRESENTABLE)
-                        .build()
-                )
-                .build();
-
-        // _mappedInputField directive definition
-        GraphQLDirective mappedInputFieldDirective = GraphQLDirective.newDirective()
-                .name("_mappedInputField")
-                .description("")
-                .validLocation(Introspection.DirectiveLocation.INPUT_FIELD_DEFINITION)
-                .argument(GraphQLArgument.newArgument()
-                        .name("inputField")
-                        .description("")
-                        .type(UNREPRESENTABLE)
-                        .build()
-                )
-                .build();
-
-        // Add new definitions to schema
-        GraphQLSchema newSchema = GraphQLSchema.newSchema(schema)
-                .additionalDirective(mappedTypeDirective)
-                .additionalDirective(mappedOperationDirective)
-                .additionalDirective(mappedInputFieldDirective)
-                .build();
-
-        GraphQLSchema federatedSchema = createSchemaWithDirectives(newSchema);
-        printSchema(federatedSchema);
-        return federatedSchema;
-    }
-
-
-    private GraphQLSchema createSchemaWithDirectives(GraphQLSchema schema){
+    public GraphQLSchema createSchemaWithDirectives() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        GraphQLSchema schema = MapExposedSchema.customSchema(reviewQuery, "com.chegg.federation.review");
         return Federation.transform(schema)
                 .fetchEntities(env -> env.<List<Map<String, Object>>>getArgument(_Entity.argumentName)
                         .stream()

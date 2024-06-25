@@ -1,14 +1,8 @@
 federation_version: 2
 subgraphs:
-  product:
-    routing_url: http://localhost:5001/graphql
+  webui:
+    routing_url: https://space-qa6-app-platform.sprinklr.com/ui/graphql
     schema:
-      subgraph_url: http://localhost:5001/graphql
-  review:
-    routing_url: http://localhost:5002/graphql
-    schema:
-      subgraph_url: http://localhost:5002/graphql
-  user:
-    routing_url: http://localhost:5003/graphql
-    schema:
-      subgraph_url: http://localhost:5003/graphql
+      subgraph_url: https://space-qa6-app-platform.sprinklr.com/ui/graphql
+      introspection_headers: # Optional headers to include in introspection request
+        cookie: ${env.COOKIE}

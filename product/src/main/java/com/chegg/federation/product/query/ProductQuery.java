@@ -2,6 +2,7 @@ package com.chegg.federation.product.query;
 
 import com.chegg.federation.product.model.Product;
 import com.chegg.federation.product.repository.ProductRepository;
+import contexts.DummyContext;
 import graphql.kickstart.execution.context.DefaultGraphQLContext;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLEnvironment;
@@ -54,5 +55,11 @@ public class ProductQuery {
         return "Static Noise";
     }
 
+    @GraphQLQuery(name = "dummy")
+    public DummyContext getDummy() {
+        DummyContext dummyContext = new DummyContext();
+        dummyContext.setName("dummy");
+        return dummyContext;
+    }
 
 }

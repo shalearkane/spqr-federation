@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -26,10 +25,15 @@ public class ProductService {
     }
 
     public Product lookupProduct(String upc) {
-        Product product1 = products.stream().filter(product -> product.getUpc().equals(upc)).findAny().get();
-        product1.setReviews(reviews.stream()
-                .filter(review -> review.getProduct().getUpc().equals(product1.getUpc()))
-                .collect(Collectors.toList()));
-        return product1;
+//        Product product1 = products.stream().filter(product -> product.getUpc().equals(upc)).findAny().get();
+//        product1.setReviews(reviews.stream()
+//                .filter(review -> review.getProduct().getUpc().equals(product1.getUpc()))
+//                .collect(Collectors.toList()));
+//        return product1;
+        System.out.println("Printing ctx");
+//        System.out.println(ctx.Name);
+        Product product2 = new Product(upc);
+        product2.setReviews(reviews);
+        return product2;
     }
 }

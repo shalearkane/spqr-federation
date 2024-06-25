@@ -2,6 +2,12 @@ const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const { ApolloGateway, RemoteGraphQLDataSource } = require("@apollo/gateway");
 
+class AuthenticatedDataSource extends RemoteGraphQLDataSource {
+  willSendRequest({ request, context }) {
+    request.http.headers.set('cookie', process.env.COOKIE);
+    }
+}
+
 const gateway = new ApolloGateway({
     serviceList: [
         // This entire `serviceList` is optional when running in managed federation
@@ -9,10 +15,18 @@ const gateway = new ApolloGateway({
         // using a single source of truth to compose a schema is recommended and
         // prevents composition failures at runtime using schema validation using
         // real usage-based metrics.
-        { name: "product", url: "http://localhost:5001/graphql" },
-        { name: "review", url: "http://localhost:5002/graphql" },
-        { name: "user", url: "http://localhost:5003/graphql" },
+//        { name: "product", url: "http://localhost:5001/graphql" },
+//        { name: "review", url: "http://localhost:5002/graphql" },
+//        { name: "user", url: "http://localhost:5003/graphql" },
+        { name: "webui", url: "https://space-qa6-app-platform.sprinklr.com/ui/graphql"}
     ],
+    introspectionHeaders: {
+        cookie: process.env.COOKIE
+      },
+
+     buildService({ name, url }) {
+         return new AuthenticatedDataSource({ url });
+       },
     // Experimental: Enabling this enables the query plan view in Playground.
 });
 
