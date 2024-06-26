@@ -1,8 +1,0 @@
-federation_version: 2
-subgraphs:
-  webui:
-    routing_url: https://space-qa6-app-platform.sprinklr.com/ui/graphql
-    schema:
-      subgraph_url: https://space-qa6-app-platform.sprinklr.com/ui/graphql
-      introspection_headers: # Optional headers to include in introspection request
-        cookie: ${env.COOKIE}

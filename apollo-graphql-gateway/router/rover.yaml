@@ -1,0 +1,12 @@
+federation_version: 2
+subgraphs:
+  product:
+    routing_url: http://localhost:5001/graphql
+    schema:
+      subgraph_url: http://localhost:5001/graphql
+  webui:
+    routing_url: https://space.platform.com/ui/graphql
+    schema:
+      subgraph_url: https://space.platform.com/ui/graphql
+      introspection_headers: # Optional headers to include in introspection request
+        cookie: ${env.COOKIE}
